@@ -1,29 +1,33 @@
 package br.com.boasaude.cadastro.conveniado.infra.config;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.context.event.EventListener;
 
-import com.github.javafaker.Faker;
-
 import br.com.boasaude.cadastro.conveniado.core.domain.entity.Conveniado;
 import br.com.boasaude.cadastro.conveniado.core.domain.vo.TipoConveniado;
 import br.com.boasaude.cadastro.conveniado.core.service.ConveniadoService;
 import br.com.boasaude.cadastro.conveniado.core.util.Paginador;
+import br.com.boasaude.cadastro.conveniado.integration.ConsultaConveniados;
+import br.com.boasaude.cadastro.conveniado.integration.dto.ConveniadoDTO;
+import br.com.boasaude.cadastro.conveniado.integration.dto.ConveniadosDTO;
 import lombok.extern.slf4j.Slf4j;
 
 @Configuration
 @Slf4j
 public class ConveniadoDump {
 	
-	private static final int QUANTIDADE_CONVENIADOS_DUMP = 50;
-
-	@Autowired
-	private Faker faker;
-	
 	@Autowired
 	private ConveniadoService conveniadoService;
+	
+	@Autowired
+	private ConsultaConveniados consultaConveniados;
+	
+	@Autowired
+	protected ModelMapper modelMapper;
+	
 	
 	@EventListener(classes = ContextRefreshedEvent.class )
 	public void iniciarBancoDeDados () {
@@ -40,13 +44,14 @@ public class ConveniadoDump {
 	}
 
 	private void inserirConveniadosDb() {
-		for (int i = 0; i < QUANTIDADE_CONVENIADOS_DUMP; i++) {
+		ConveniadosDTO conveniados = consultaConveniados.consulta();
+		for (ConveniadoDTO dto : conveniados.getConveniados()) {
 			Conveniado conveniado = new Conveniado();
-			conveniado.setId(faker.random().nextLong());
-			conveniado.setNome(faker.company().name());
-			conveniado.setTipo(TipoConveniado.getRandomTipoConveniado());
-			conveniado.setCpf(String.valueOf(faker.random().nextLong()));
-			
+			conveniado.setCpf(dto.getCpf());
+			conveniado.setId(dto.getId());
+			conveniado.setNome(dto.getNome());
+			conveniado.setCpf(conveniado.getCpf());
+			conveniado.setTipo(TipoConveniado.HOSPITAL);
 			this.conveniadoService.salvar(conveniado);
 		}
 	}
