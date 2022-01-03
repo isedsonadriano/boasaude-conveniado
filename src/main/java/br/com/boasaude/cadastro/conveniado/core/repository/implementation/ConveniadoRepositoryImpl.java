@@ -33,8 +33,9 @@ public class ConveniadoRepositoryImpl implements ConveniadoRepository {
 	public Conveniado capturarPorId(Long id) {
 		ConveniadoJpa conveniadoJpa = repository.findById(id).get();
 		Conveniado conveniado = new Conveniado();
+		conveniado.setId(conveniadoJpa.getId());
 		conveniado.setNome(conveniadoJpa.getNome());
-		conveniado.setCpf(conveniadoJpa.getCpf());
+		conveniado.setCnpj(conveniadoJpa.getCnpj());
 		conveniado.setTipo(conveniadoJpa.getTipo());
 		return conveniado;
 	}
@@ -45,17 +46,21 @@ public class ConveniadoRepositoryImpl implements ConveniadoRepository {
 	}
 
 	private List<Conveniado> capturarConveniadosBD(Paginador paginador) {
-		PageRequest paginaRetorno =   PageRequest.of(paginador.getPageNumber(), paginador.getPageSize(), Sort.by("id"));
+		PageRequest paginaRetorno =   PageRequest.of(paginador.getPageNumber(), paginador.getPageSize(), Sort.by("id").descending());
 		return repository.findAll(paginaRetorno).get().map(this::buildConveniado).collect(Collectors.toList());
 	}
 
 	@Override
 	public void atualizar(Conveniado conveniado) {
-		Optional<ConveniadoJpa> conveniadoJpa = this.repository.findById(conveniado.getId());
-		if (conveniadoJpa.isPresent()) {
-			conveniadoJpa.get().setCpf(conveniado.getCpf());
+		Optional<ConveniadoJpa> conveniadoJpaOpt = this.repository.findById(conveniado.getId());
+		if (conveniadoJpaOpt.isPresent()) {
+			ConveniadoJpa conveniadoJpa = conveniadoJpaOpt.get();
+			conveniadoJpa.setCnpj(conveniado.getCnpj());
+			conveniadoJpa.setNome(conveniado.getNome());
+			conveniadoJpa.setTipo(conveniado.getTipo());
+
+			this.repository.save(conveniadoJpa);
 		}
-		this.repository.save(conveniadoJpa.get());
 	}
 
 	@Override
@@ -70,22 +75,22 @@ public class ConveniadoRepositoryImpl implements ConveniadoRepository {
 		Conveniado conveniado = new Conveniado();
 		conveniado.setId(conveniadoJpa.getId());
 		conveniado.setNome(conveniadoJpa.getNome());
-		conveniado.setCpf(conveniadoJpa.getCpf());
-		conveniado.setTipo(TipoConveniado.getRandomTipoConveniado());
+		conveniado.setCnpj(conveniadoJpa.getCnpj());
+		conveniado.setTipo(TipoConveniado.HOSPITAL);
 		return conveniado;
 	}
 
 	private ConveniadoJpa buildConveniadoJpa(Conveniado conveniado) {
 		ConveniadoJpa conveniadoJpa = new ConveniadoJpa();
 		conveniadoJpa.setNome(conveniado.getNome());
-		conveniadoJpa.setCpf(conveniado.getCpf());
+		conveniadoJpa.setCnpj(conveniado.getCnpj());
 		conveniadoJpa.setTipo(conveniado.getTipo());
 		return conveniadoJpa;
 	}
 
 	@Override
-	public Conveniado findByCpf(String cpf) {
-		ConveniadoJpa conveniadoJpa = this.repository.findByCpf(cpf);
+	public Conveniado findByCnpj(String cnpj) {
+		ConveniadoJpa conveniadoJpa = this.repository.findByCnpj(cnpj);
 		return buildConveniado(conveniadoJpa);
 	}
 }

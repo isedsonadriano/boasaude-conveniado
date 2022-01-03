@@ -10,10 +10,14 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
 import br.com.boasaude.cadastro.conveniado.core.domain.vo.TipoConveniado;
+import lombok.Getter;
+import lombok.Setter;
 
 
 @Entity
 @Table(name = "boasaude_conveniado")
+@Getter
+@Setter
 public class ConveniadoJpa {
 
 	@Id
@@ -24,42 +28,10 @@ public class ConveniadoJpa {
 	private String nome;
 
 	@NotNull
-	private String cpf;
+	private String cnpj;
 
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TipoConveniado tipo;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public String getNome() {
-		return nome;
-	}
-
-	public void setNome(String name) {
-		this.nome = name;
-	}
-
-	public String getCpf() {
-		return cpf;
-	}
-
-	public void setCpf(String password) {
-		this.cpf = password;
-	}
-
-	public TipoConveniado getTipo() {
-		return tipo;
-	}
-
-	public void setTipo(TipoConveniado gender) {
-		this.tipo = gender;
-	}
 
 }

@@ -23,7 +23,10 @@ public class ConveniadoResponse {
 	@ApiModelProperty(notes = "Nome do conveniado", name = "nome", required = true, value = "Teste nome")
 	private String nome;
 
-	@ApiModelProperty(notes = "Cpf do conveniado", name = "cpf", required = true, value = "Teste Cpf")
-	private String cpf;
+	@ApiModelProperty(notes = "Cnpj do conveniado", name = "cnpj", required = true, value = "Teste Cnpj")
+	private String cnpj;
+
+	@ApiModelProperty(notes = "Tipo do conveniado",name="tipo",required=true,value="Teste Tipo conveniado")
+	private String tipo;
 
 }

@@ -47,11 +47,11 @@ public class ConveniadoDump {
 		ConveniadosDTO conveniados = consultaConveniados.consulta();
 		for (ConveniadoDTO dto : conveniados.getConveniados()) {
 			Conveniado conveniado = new Conveniado();
-			conveniado.setCpf(dto.getCpf());
+			conveniado.setCnpj(dto.getCnpj());
 			conveniado.setId(dto.getId());
 			conveniado.setNome(dto.getNome());
-			conveniado.setCpf(conveniado.getCpf());
-			conveniado.setTipo(TipoConveniado.HOSPITAL);
+			conveniado.setCnpj(dto.getCnpj());
+			conveniado.setTipo(TipoConveniado.getRandomTipoConveniado());
 			this.conveniadoService.salvar(conveniado);
 		}
 	}

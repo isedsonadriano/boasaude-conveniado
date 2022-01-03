@@ -29,7 +29,7 @@ public class ConveniadoServiceImpl implements ConveniadoService {
 
 	@Override
 	public void salvar(Conveniado conveniado) {
-		DomainException.throwIf(Objects.nonNull(this.clientRepository.findByCpf(conveniado.getCpf())), "conveniado já cadastrado");
+		DomainException.throwIf(Objects.nonNull(this.clientRepository.findByCnpj(conveniado.getCnpj())), "Conveniado já cadastrado");
 		this.clientRepository.salvar(conveniado);
 	}
 

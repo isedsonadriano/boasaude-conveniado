@@ -17,6 +17,6 @@ public interface ConveniadoRepository {
 
 	void deletar(Long id);
 
-	Conveniado findByCpf(String cpf);
+	Conveniado findByCnpj(String cnpj);
 
 }

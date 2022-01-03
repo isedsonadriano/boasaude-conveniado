@@ -8,7 +8,7 @@ import br.com.boasaude.cadastro.conveniado.infra.repository.orm.ConveniadoJpa;
 @Repository
 public interface ConveniadoRepositoryMySql extends JpaRepository<ConveniadoJpa, Long> {
 
-	ConveniadoJpa findByCpf(String cpf);
+	ConveniadoJpa findByCnpj(String cnpj);
 
 
 }
