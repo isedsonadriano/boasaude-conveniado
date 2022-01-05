@@ -1,5 +1,6 @@
 package br.com.boasaude.cadastro.conveniado.infra.repository.orm;
 
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
@@ -9,6 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 
+import br.com.boasaude.cadastro.conveniado.core.domain.enums.Status;
+import br.com.boasaude.cadastro.conveniado.core.domain.vo.TelefoneVO;
 import br.com.boasaude.cadastro.conveniado.core.domain.vo.TipoConveniado;
 import lombok.Getter;
 import lombok.Setter;
@@ -33,5 +36,12 @@ public class ConveniadoJpa {
 	@NotNull
 	@Enumerated(EnumType.STRING)
 	private TipoConveniado tipo;
+
+	@NotNull
+	@Embedded
+	private TelefoneVO telefone;
+
+	@Enumerated(EnumType.STRING)
+	private Status status;
 
 }

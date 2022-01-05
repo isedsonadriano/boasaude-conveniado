@@ -8,8 +8,8 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 
+import br.com.boasaude.cadastro.conveniado.application.conveniado.mapper.ConveniadoMapper;
 import br.com.boasaude.cadastro.conveniado.core.domain.entity.Conveniado;
-import br.com.boasaude.cadastro.conveniado.core.domain.vo.TipoConveniado;
 import br.com.boasaude.cadastro.conveniado.core.repository.ConveniadoRepository;
 import br.com.boasaude.cadastro.conveniado.core.util.Paginador;
 import br.com.boasaude.cadastro.conveniado.infra.repository.ConveniadoRepositoryMySql;
@@ -32,12 +32,7 @@ public class ConveniadoRepositoryImpl implements ConveniadoRepository {
 	@Override
 	public Conveniado capturarPorId(Long id) {
 		ConveniadoJpa conveniadoJpa = repository.findById(id).get();
-		Conveniado conveniado = new Conveniado();
-		conveniado.setId(conveniadoJpa.getId());
-		conveniado.setNome(conveniadoJpa.getNome());
-		conveniado.setCnpj(conveniadoJpa.getCnpj());
-		conveniado.setTipo(conveniadoJpa.getTipo());
-		return conveniado;
+		return ConveniadoMapper.conveniadoJpaToConveniado(conveniadoJpa);
 	}
 
 	@Override
@@ -58,6 +53,8 @@ public class ConveniadoRepositoryImpl implements ConveniadoRepository {
 			conveniadoJpa.setCnpj(conveniado.getCnpj());
 			conveniadoJpa.setNome(conveniado.getNome());
 			conveniadoJpa.setTipo(conveniado.getTipo());
+			conveniadoJpa.setStatus(conveniado.getStatus());
+			conveniadoJpa.setTelefone(conveniado.getTelefone());
 
 			this.repository.save(conveniadoJpa);
 		}
@@ -72,20 +69,11 @@ public class ConveniadoRepositoryImpl implements ConveniadoRepository {
 		if(Objects.isNull(conveniadoJpa)) {
 			return null;
 		}
-		Conveniado conveniado = new Conveniado();
-		conveniado.setId(conveniadoJpa.getId());
-		conveniado.setNome(conveniadoJpa.getNome());
-		conveniado.setCnpj(conveniadoJpa.getCnpj());
-		conveniado.setTipo(TipoConveniado.HOSPITAL);
-		return conveniado;
+		return ConveniadoMapper.conveniadoJpaToConveniado(conveniadoJpa);
 	}
 
 	private ConveniadoJpa buildConveniadoJpa(Conveniado conveniado) {
-		ConveniadoJpa conveniadoJpa = new ConveniadoJpa();
-		conveniadoJpa.setNome(conveniado.getNome());
-		conveniadoJpa.setCnpj(conveniado.getCnpj());
-		conveniadoJpa.setTipo(conveniado.getTipo());
-		return conveniadoJpa;
+		return ConveniadoMapper.conveniadoToConveniadoJpa(conveniado);
 	}
 
 	@Override

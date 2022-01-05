@@ -25,6 +25,11 @@ public class ConveniadoRequest {
 
 	@ApiModelProperty(notes = "Tipo do conveniado",name="tipo",required=true,value="Teste Tipo conveniado")
 	private String tipo;
-	
 
+	@ApiModelProperty(notes = "Telefone do conveniado",name="telefone",required=true,value="Teste telefone")
+	private String telefone;
+
+	@ApiModelProperty(notes = "Status do conveniado",name="status",required=true,value="Status prestador")
+	private String status;
+	
 }

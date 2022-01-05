@@ -28,6 +28,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import br.com.boasaude.cadastro.conveniado.application.conveniado.dto.request.v1.ConveniadoRequest;
 import br.com.boasaude.cadastro.conveniado.application.conveniado.dto.response.v1.ConveniadoResponse;
+import br.com.boasaude.cadastro.conveniado.application.conveniado.mapper.ConveniadoMapper;
 import br.com.boasaude.cadastro.conveniado.core.domain.entity.Conveniado;
 import br.com.boasaude.cadastro.conveniado.core.service.ConveniadoService;
 import br.com.boasaude.cadastro.conveniado.core.util.Paginador;
@@ -60,7 +61,7 @@ public class ConveniadoController  {
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public ResponseEntity<ConveniadoResponse> salvar(@RequestBody @Valid ConveniadoRequest conveniadoRequest, UriComponentsBuilder uriBuilder) {
-		Conveniado conveniado = buildConveniado(conveniadoRequest);
+		Conveniado conveniado = ConveniadoMapper.conveniadoRequestToConveniado(conveniadoRequest);
 		this.service.salvar(conveniado);
 		URI uri = uriBuilder.path("{id}").buildAndExpand(conveniado.getId()).toUri();
 		return ResponseEntity.created(uri).body(buildConveniadoResponse(conveniado));
@@ -80,7 +81,7 @@ public class ConveniadoController  {
 	public ResponseEntity<ConveniadoResponse> catpurar(@PathVariable Long id) {
 		Conveniado conveniado = service.capturarPorId(id);
 		if (Objects.nonNull(conveniado)) {
-			return ResponseEntity.ok(buildConveniadoResponse(conveniado));
+			return ResponseEntity.ok(ConveniadoMapper.conveniadoToConveniadoResponse(conveniado));
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -89,7 +90,7 @@ public class ConveniadoController  {
 	@PutMapping("/{id}")
 	@ResponseBody
 	public ResponseEntity<ConveniadoResponse> atualizar(@PathVariable Long id, @RequestBody @Valid ConveniadoRequest conveniadoRequest, UriComponentsBuilder uriBuilder) {
-		Conveniado conveniado = buildConveniado(conveniadoRequest);
+		Conveniado conveniado = ConveniadoMapper.conveniadoRequestToConveniado(conveniadoRequest);
 		conveniado.setId(id);
 		this.service.atualizar(conveniado);
 		return ResponseEntity.ok(buildConveniadoResponse(conveniado));
@@ -105,10 +106,6 @@ public class ConveniadoController  {
 
 	private ConveniadoResponse buildConveniadoResponse(Conveniado conveniado) {
 		return modelMapper.map(conveniado, ConveniadoResponse.class);
-	}
-	
-	private Conveniado buildConveniado(ConveniadoRequest conveniadoRequest) {
-		return modelMapper.map(conveniadoRequest, Conveniado.class);
 	}
 
 }
